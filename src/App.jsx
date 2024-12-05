@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router"
 
 import Body from "./Body"
-import Login from "./Login"
 import Profile from "./Profile"
+import Login from "./Login"
 
 
 export default function App() {
