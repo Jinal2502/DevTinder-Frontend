@@ -1,11 +1,10 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import UserCard from './UserCard';
 import axios from 'axios';
 import { BASE_URL } from '../utils/constants';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../utils/userSlice';
-
+import { Save, Edit, AlertTriangle } from 'lucide-react'
 
 const EditProfile = ({user}) => {
     const [firstName, setFirstName] = useState(user.firstName);
@@ -18,178 +17,102 @@ const EditProfile = ({user}) => {
     const dispatch = useDispatch();
     const [showToast, setShowToast] = useState(false);
 
-
     const saveProfile = async() => {
         setError("");
         try {
-
-            const res = await axios.patch(BASE_URL + "/profile/edit",{firstName, lastName, photoUrl, age, gender, about},{withCredentials:true});
+            const res = await axios.patch(BASE_URL + "/profile/edit",
+                {firstName, lastName, photoUrl, age, gender, about},
+                {withCredentials:true}
+            );
             dispatch(addUser(res?.data.data));
             setShowToast(true);
-            const i = setTimeout(() => {
+            setTimeout(() => {
                 setShowToast(false);
             }, 4000);
-
-            
         } catch (err) {
             setError(err.response.data)
-            
         }
-
-
-
-
     }
 
-  return (
-   <>
-    <div className='flex justify-center my-10'>
-    <div className='flex justify-center mx-10'>
-    <div className="card bg-base-300 w-96 shadow-xl">
-<div className="card-body">
-  <h2 className="card-title justify-center">Edit Profile</h2>
-  <div>
-  <label className="form-control w-full max-w-xs">
- <div className="label">
-  <span className="label-text">First Name</span>
- 
-  </div>
-  <input 
-  type="text"
-  value={firstName}
-  placeholder="" 
-  className="input input-bordered w-full max-w-xs"
-  onChange={(e) => setFirstName(e.target.value)}
-  
-   />
-  <div className="label">
-  
- 
-</div>
-    </label>
+    const renderInput = (label, value, onChange, type = "text") => (
+        <div className="mb-6">
+            <label className="block text-[#8892B0] text-sm font-bold mb-2">
+                {label}
+            </label>
+            <input 
+                type={type}
+                value={value}
+                onChange={onChange}
+                className="w-full px-4 py-3 bg-[#112240] border-2 border-[#64FFDA]/20 rounded-lg text-[#CCD6F6] 
+                focus:outline-none focus:border-[#64FFDA] transition-all"
+            />
+        </div>
+    );
 
-    <label className="form-control w-full max-w-xs">
- <div className="label">
-  <span className="label-text">Last Name</span>
- 
-  </div>
-  <input 
-  type="text"
-  value={lastName}
-  placeholder="" 
-  className="input input-bordered w-full max-w-xs"
-  onChange={(e) => setLastName(e.target.value)}
-  
-   />
-  <div className="label">
-  
- 
-</div>
-    </label>
+    return (
+        <div className="min-h-screen bg-[#0A192F] py-16 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto flex flex-col lg:flex-row gap-12 items-start">
+                {/* Edit Profile Section */}
+                <div className="w-full lg:w-1/2 bg-[#112240] rounded-2xl p-8 shadow-2xl border-2 border-[#64FFDA]/20">
+                    <div className="flex items-center mb-8">
+                        <Edit className="w-8 h-8 mr-4 text-[#64FFDA]" />
+                        <h2 className="text-3xl font-bold text-[#CCD6F6]">Edit Profile</h2>
+                    </div>
 
-    <label className="form-control w-full max-w-xs">
- <div className="label">
-  <span className="label-text">Photo Url</span>
- 
-  </div>
-  <input 
-  type="text"
-  value={photoUrl}
-  placeholder="" 
-  className="input input-bordered w-full max-w-xs"
-  onChange={(e) => setPhotoUrl(e.target.value)}
-  
-   />
-  <div className="label">
-  
- 
-</div>
-    </label>
+                    <form>
+                        {renderInput("First Name", firstName, (e) => setFirstName(e.target.value))}
+                        {renderInput("Last Name", lastName, (e) => setLastName(e.target.value))}
+                        {renderInput("Photo URL", photoUrl, (e) => setPhotoUrl(e.target.value))}
+                        {renderInput("Age", age, (e) => setAge(e.target.value), "number")}
+                        {renderInput("Gender", gender, (e) => setGender(e.target.value))}
+                        
+                        <div className="mb-6">
+                            <label className="block text-[#8892B0] text-sm font-bold mb-2">
+                                About
+                            </label>
+                            <textarea 
+                                value={about}
+                                onChange={(e) => setAbout(e.target.value)}
+                                className="w-full px-4 py-3 bg-[#112240] border-2 border-[#64FFDA]/20 rounded-lg text-[#CCD6F6] 
+                                focus:outline-none focus:border-[#64FFDA] transition-all h-32"
+                            />
+                        </div>
 
-    <label className="form-control w-full max-w-xs">
- <div className="label">
-  <span className="label-text">Age</span>
- 
-  </div>
-  <input 
-  type="text"
-  value={age}
-  placeholder="" 
-  className="input input-bordered w-full max-w-xs"
-  onChange={(e) => setAge(e.target.value)}
-  
-   />
-  <div className="label">
-  
- 
-</div>
-    </label>
+                        {error && (
+                            <div className="bg-red-500/10 border-l-4 border-red-500 text-red-300 p-4 mb-6 flex items-center">
+                                <AlertTriangle className="mr-4 text-red-500" />
+                                {error}
+                            </div>
+                        )}
 
-    <label className="form-control w-full max-w-xs">
- <div className="label">
-  <span className="label-text">Gender</span>
- 
-  </div>
-  <input 
-  type="text"
-  value={gender}
-  placeholder="" 
-  className="input input-bordered w-full max-w-xs"
-  onChange={(e) => setGender(e.target.value)}
-  
-   />
-  <div className="label">
-  
- 
-</div>
-    </label>
+                        <button 
+                            onClick={saveProfile}
+                            className="w-full bg-[#64FFDA] text-[#0A192F] px-6 py-3 rounded-lg font-bold 
+                            hover:bg-opacity-80 transition-all flex items-center justify-center group"
+                        >
+                            <Save className="mr-2 group-hover:rotate-6 transition-transform" />
+                            Save Profile
+                        </button>
+                    </form>
+                </div>
 
-    <label className="form-control w-full max-w-xs">
- <div className="label">
-  <span className="label-text">About</span>
- 
-  </div>
-  <input 
-  type="text"
-  value={about}
-  placeholder="" 
-  className="input input-bordered w-full max-w-xs"
-  onChange={(e) => setAbout(e.target.value)}
-  
-   />
-  <div className="label">
-  
- 
-</div>
-    </label>
+                {/* Preview Section */}
+                <div className="w-full lg:w-1/2">
+                    <UserCard user={{firstName, lastName, photoUrl, age, gender, about}} />
+                </div>
+            </div>
 
-
-  </div>
-  <div>
-  </div>
-  <p className='text-red-700'> {error}</p>
-  <div className="card-actions justify-center">
-    <button className="btn btn-primary" onClick={saveProfile} >Save Profile</button>
-  </div>
-</div>
-</div>
-    </div>
-     <UserCard  user = {{firstName, lastName, photoUrl, age, gender, about}}/>
-
-  </div>
-  <div>
-    { showToast && <div className="toast toast-top toast-center">
-    
-    <div className="alert alert-success">
-<span>CHANGES SAVED SUCCESFULLY</span>
-    </div>
-    </div>}
-  </div>
-  
-
- 
-  </> 
-  );
+            {/* Toast Notification */}
+            {showToast && (
+                <div className="fixed top-8 left-1/2 transform -translate-x-1/2 z-50">
+                    <div className="bg-green-500/20 border-l-4 border-green-500 text-green-300 px-6 py-4 rounded-lg flex items-center shadow-2xl">
+                        <Save className="mr-4 text-green-500" />
+                        Changes Saved Successfully
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 };
 
-export default EditProfile
+export default EditProfile;
