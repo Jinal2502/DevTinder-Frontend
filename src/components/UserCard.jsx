@@ -1,8 +1,27 @@
 import React from 'react'
 import { Zap, X, Heart } from 'lucide-react'
+import { useDispatch } from "react-redux";
+import { removeUserFromFeed } from "../utils/feedSlice";
+import axios from 'axios';
+import { BASE_URL } from '../utils/constants';
 
 const UserCard = ({ user }) => {
-    const {firstName, lastName, photoUrl, age, about, gender } = user;
+    const { _id ,firstName, lastName, photoUrl, age, about, gender } = user;
+    const dispatch = useDispatch();
+    console.log(_id);
+
+    const handleSendRequest = async (status, userId) => {
+        try {
+            const res = await axios.post(
+            BASE_URL + "/request/send/" + status + "/" + userId,
+            {},
+            { withCredentials: true }
+          );
+          dispatch(removeUserFromFeed(userId));
+        } catch (err) {
+            console.log(err);
+        }
+      };
     
     return (
         <div className="min-h-screen bg-[#0A192F] flex items-center justify-center p-4">
@@ -45,10 +64,10 @@ const UserCard = ({ user }) => {
                     )}
                     
                     <div className="flex justify-center space-x-6">
-                        <button className="bg-red-500/20 text-red-300 hover:bg-red-500/40 p-4 rounded-full transition-all group">
+                        <button className="bg-red-500/20 text-red-300 hover:bg-red-500/40 p-4 rounded-full transition-all group" onClick={() => handleSendRequest("ignored", _id)}>
                             <X className="w-8 h-8 text-red-300 group-hover:rotate-12 transition-transform" />
                         </button>
-                        <button className="bg-green-500/20 text-green-300 hover:bg-green-500/40 p-4 rounded-full transition-all group">
+                        <button className="bg-green-500/20 text-green-300 hover:bg-green-500/40 p-4 rounded-full transition-all group" onClick={() => handleSendRequest("interested", _id)} >
                             <Heart className="w-8 h-8 text-green-300 group-hover:scale-110 transition-transform" />
                         </button>
                     </div>

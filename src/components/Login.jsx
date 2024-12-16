@@ -14,7 +14,7 @@ import {
 } from 'lucide-react'
 
 const Login = () => {
-  const [emailId, setEmailId] = useState("jilu.jr11@gmail.com");
+  const [emailId, setEmailId] = useState("tyson.jr11@gmail.com");
   const [password, setPassword] = useState("Jinal25022006#");
   const [error, setError] = useState("")
   const [showPassword, setShowPassword] = useState(false)
