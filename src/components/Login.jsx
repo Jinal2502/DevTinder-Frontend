@@ -1,155 +1,277 @@
-import React, { useState } from 'react'
-import axios from 'axios'
-import { useDispatch } from 'react-redux'
-import { addUser } from '../utils/userSlice'
-import { useNavigate } from 'react-router-dom'
-import { BASE_URL } from '../utils/constants'
-import { 
-  LogIn, 
-  Mail, 
-  Lock, 
-  AlertTriangle, 
-  EyeOff, 
-  Eye 
-} from 'lucide-react'
+// import { useState } from "react";
+// import axios from "axios";
+// import { useDispatch } from "react-redux";
+// import { addUser } from "../utils/userSlice";
+// import { useNavigate } from "react-router-dom";
+// import { BASE_URL } from "../utils/constants";
+
+// const Login = () => {
+//   const [emailId, setEmailId] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [firstName, setFirstName] = useState("");
+//   const [lastName, setLastName] = useState("");
+//   const [isLoginForm, setIsLoginForm] = useState(false);
+//   const [error, setError] = useState("");
+//   const dispatch = useDispatch();
+//   const navigate = useNavigate();
+
+//   const handleLogin = async () => {
+//     try {
+//       const res = await axios.post(
+//         BASE_URL + "/login",
+//         {
+//           emailId,
+//           password,
+//         },
+//         { withCredentials: true }
+//       );
+//       dispatch(addUser(res.data));
+//       return navigate("/");
+//     } catch (err) {
+//       setError(err?.response?.data || "Something went wrong");
+//     }
+//   };
+
+//   const handleSignUp = async () => {
+//     try {
+//       const res = await axios.post(
+//         BASE_URL + "/signup",
+//         { firstName, lastName, emailId, password },
+//         { withCredentials: true }
+//       );
+//       dispatch(addUser(res.data.data));
+//       return navigate("/profile");
+//     } catch (err) {
+//       setError(err?.response?.data || "Something went wrong");
+//     }
+//   };
+
+//   return (
+//     <div className="flex justify-center my-10">
+//       <div className="card bg-base-300 w-96 shadow-xl">
+//         <div className="card-body">
+//           <h2 className="card-title justify-center">
+//             {isLoginForm ? "Login" : "Sign Up"}
+//           </h2>
+//           <div>
+//             {!isLoginForm && (
+//               <>
+//                 <label className="form-control w-full max-w-xs my-2">
+//                   <div className="label">
+//                     <span className="label-text">First Name</span>
+//                   </div>
+//                   <input
+//                     type="text"
+//                     value={firstName}
+//                     className="input input-bordered w-full max-w-xs"
+//                     onChange={(e) => setFirstName(e.target.value)}
+//                   />
+//                 </label>
+//                 <label className="form-control w-full max-w-xs my-2">
+//                   <div className="label">
+//                     <span className="label-text">Last Name</span>
+//                   </div>
+//                   <input
+//                     type="text"
+//                     value={lastName}
+//                     className="input input-bordered w-full max-w-xs"
+//                     onChange={(e) => setLastName(e.target.value)}
+//                   />
+//                 </label>
+//               </>
+//             )}
+//             <label className="form-control w-full max-w-xs my-2">
+//               <div className="label">
+//                 <span className="label-text">Email ID:</span>
+//               </div>
+//               <input
+//                 type="text"
+//                 value={emailId}
+//                 className="input input-bordered w-full max-w-xs"
+//                 onChange={(e) => setEmailId(e.target.value)}
+//               />
+//             </label>
+//             <label className="form-control w-full max-w-xs my-2">
+//               <div className="label">
+//                 <span className="label-text">Password</span>
+//               </div>
+//               <input
+//                 type="password"
+//                 value={password}
+//                 className="input input-bordered w-full max-w-xs"
+//                 onChange={(e) => setPassword(e.target.value)}
+//               />
+//             </label>
+//           </div>
+//           <p className="text-red-500">{error}</p>
+//           <div className="card-actions justify-center m-2">
+//             <button
+//               className="btn btn-primary"
+//               onClick={isLoginForm ? handleLogin : handleSignUp}
+//             >
+//               {isLoginForm ? "Login" : "Sign Up"}
+//             </button>
+//           </div>
+
+//           <p
+//             className="m-auto cursor-pointer py-2"
+//             onClick={() => setIsLoginForm((value) => !value)}
+//           >
+//             {isLoginForm
+//               ? "New User? Signup Here"
+//               : "Existing User? Login Here"}
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+// export default Login;
+
+
+import { useState } from "react";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
+import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../utils/constants";
+import { Zap } from 'lucide-react';
 
 const Login = () => {
-  const [emailId, setEmailId] = useState("tyson.jr11@gmail.com");
-  const [password, setPassword] = useState("Jinal25022006#");
-  const [error, setError] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
+  const [emailId, setEmailId] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [isLoginForm, setIsLoginForm] = useState(false);
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    setError("");
     try {
-      const res = await axios.post(BASE_URL + "/login", {
-        emailId,
-        password,
-      }, 
-      {withCredentials: true}
+      const res = await axios.post(
+        BASE_URL + "/login",
+        {
+          emailId,
+          password,
+        },
+        { withCredentials: true }
       );
       dispatch(addUser(res.data));
-      navigate("/")
+      return navigate("/");
     } catch (err) {
       setError(err?.response?.data || "Something went wrong");
-      console.error(err);
     }
-  }
+  };
+
+  const handleSignUp = async () => {
+    try {
+      const res = await axios.post(
+        BASE_URL + "/signup",
+        { firstName, lastName, emailId, password },
+        { withCredentials: true }
+      );
+      dispatch(addUser(res.data.data));
+      return navigate("/profile");
+    } catch (err) {
+      setError(err?.response?.data || "Something went wrong");
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-[#0A192F] flex items-center justify-center px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-[#112240] p-10 rounded-2xl shadow-2xl border-2 border-[#64FFDA]/20">
-        <div className="text-center">
-          <h2 className="mt-6 text-3xl font-extrabold text-[#CCD6F6] flex items-center justify-center">
-            <LogIn className="mr-3 text-[#64FFDA]" size={32} />
-            DevTinder Login
-          </h2>
-          <p className="mt-2 text-sm text-[#8892B0]">
-            Connect with developers across the world
-          </p>
-        </div>
-        
-        <form className="mt-8 space-y-6" onSubmit={(e) => {
-          e.preventDefault();
-          handleLogin();
-        }}>
-          <div className="rounded-md shadow-sm -space-y-px">
-            {/* Email Input */}
-            <div className="mb-4">
-              <label htmlFor="email" className="sr-only">Email address</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="text-[#8892B0]" size={20} />
-                </div>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  value={emailId}
-                  onChange={(e) => setEmailId(e.target.value)}
-                  className="appearance-none rounded-lg relative block w-full px-10 py-3 
-                    border-2 border-[#64FFDA]/20 placeholder-[#8892B0] 
-                    bg-[#0A192F] text-[#CCD6F6] 
-                    focus:outline-none focus:border-[#64FFDA] 
-                    transition-all duration-300"
-                  placeholder="Email address"
-                />
-              </div>
-            </div>
+    <div className="min-h-screen bg-[#0A192F] flex items-center justify-center p-4">
+      <div className="bg-[#112240] rounded-2xl w-full max-w-md overflow-hidden shadow-2xl border-2 border-[#64FFDA]/20 transform transition-all hover:scale-105">
+        <div className="relative p-8">
+          <div className="absolute top-4 right-4">
+            <Zap className="w-8 h-8 text-[#64FFDA]" />
+          </div>
+          
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-[#CCD6F6] mb-2">
+              {isLoginForm ? "Welcome Back" : "Create Your Account"}
+            </h2>
+            <p className="text-[#8892B0]">
+              {isLoginForm 
+                ? "Log in to continue your journey" 
+                : "Join our stellar community"}
+            </p>
+          </div>
 
-            {/* Password Input */}
+          <form className="space-y-6">
+            {!isLoginForm && (
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <input
+                    type="text"
+                    value={firstName}
+                    placeholder="First Name"
+                    className="w-full bg-[#0A192F]/50 text-[#CCD6F6] border border-[#64FFDA]/20 rounded-md px-3 py-2 focus:outline-none focus:border-[#64FFDA] transition-all"
+                    onChange={(e) => setFirstName(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    value={lastName}
+                    placeholder="Last Name"
+                    className="w-full bg-[#0A192F]/50 text-[#CCD6F6] border border-[#64FFDA]/20 rounded-md px-3 py-2 focus:outline-none focus:border-[#64FFDA] transition-all"
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
+                </div>
+              </div>
+            )}
+
             <div>
-              <label htmlFor="password" className="sr-only">Password</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="text-[#8892B0]" size={20} />
-                </div>
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none rounded-lg relative block w-full px-10 py-3 
-                    border-2 border-[#64FFDA]/20 placeholder-[#8892B0] 
-                    bg-[#0A192F] text-[#CCD6F6] 
-                    focus:outline-none focus:border-[#64FFDA] 
-                    transition-all duration-300"
-                  placeholder="Password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#8892B0] hover:text-[#64FFDA]"
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
+              <input
+                type="email"
+                value={emailId}
+                placeholder="Email Address"
+                className="w-full bg-[#0A192F]/50 text-[#CCD6F6] border border-[#64FFDA]/20 rounded-md px-3 py-2 focus:outline-none focus:border-[#64FFDA] transition-all"
+                onChange={(e) => setEmailId(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <input
+                type="password"
+                value={password}
+                placeholder="Password"
+                className="w-full bg-[#0A192F]/50 text-[#CCD6F6] border border-[#64FFDA]/20 rounded-md px-3 py-2 focus:outline-none focus:border-[#64FFDA] transition-all"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            {error && (
+              <div className="text-center">
+                <p className="text-red-500 text-sm">{error}</p>
               </div>
+            )}
+
+            <div>
+              <button
+                type="button"
+                className="w-full bg-[#64FFDA]/10 text-[#64FFDA] hover:bg-[#64FFDA]/20 rounded-md px-4 py-2 transition-all duration-300 ease-in-out transform hover:scale-105"
+                onClick={isLoginForm ? handleLogin : handleSignUp}
+              >
+                {isLoginForm ? "Sign In" : "Create Account"}
+              </button>
             </div>
-          </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="bg-red-500/10 border-l-4 border-red-500 text-red-300 p-4 rounded-lg flex items-center">
-              <AlertTriangle className="mr-4 text-red-500" size={24} />
-              {error}
+            <div className="text-center">
+              <p 
+                className="text-[#8892B0] hover:text-[#64FFDA] cursor-pointer transition-colors duration-300"
+                onClick={() => setIsLoginForm((value) => !value)}
+              >
+                {isLoginForm
+                  ? "New to DevTinder? Create an Account"
+                  : "Already have an account? Log In"}
+              </p>
             </div>
-          )}
-
-          {/* Login Button */}
-          <div>
-            <button
-              type="submit"
-              className="group relative w-full flex justify-center py-3 px-4 
-                border border-transparent text-sm font-bold rounded-lg 
-                text-[#0A192F] bg-[#64FFDA] 
-                hover:bg-opacity-80 focus:outline-none focus:ring-2 
-                focus:ring-offset-2 focus:ring-[#64FFDA] 
-                transition-all duration-300 
-                flex items-center justify-center"
-            >
-              <LogIn className="mr-2 group-hover:rotate-6 transition-transform" size={20} />
-              Sign in
-            </button>
-          </div>
-        </form>
-
-        {/* Additional Links */}
-        <div className="text-center mt-4">
-          <a 
-            href="#forgot-password" 
-            className="text-sm text-[#8892B0] hover:text-[#64FFDA] transition-colors"
-          >
-            Forgot your password?
-          </a>
+          </form>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

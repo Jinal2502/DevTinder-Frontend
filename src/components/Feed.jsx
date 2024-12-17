@@ -4,6 +4,7 @@ import { BASE_URL } from '../utils/constants'
 import { useDispatch, useSelector} from 'react-redux'
 import { addFeed } from '../utils/feedSlice'
 import UserCard from './UserCard'
+import NoUsersAvailable from './NoUserAvailable'
 
 const Feed = () => {
   const feed = useSelector((store) => store.feed)
@@ -31,7 +32,7 @@ const Feed = () => {
         {/* <UserCard key={feed[0]._id} user={feed[0]} /> */}
       </div>
     ) : (
-      <div className='flex justify-center'>No User are available</div>
+      <NoUsersAvailable/>
     )
   );
 };
